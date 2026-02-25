@@ -2,24 +2,35 @@
  * Простой тест для проверки отрисовки режима
  * 
  * Минимальный скетч для диагностики проблем с координатами и выводом
+ * 
+ * Конфигурация пинов:
+ *   Реальное железо:              Wokwi (эмуляция):
+ *   ─────────────────────────────────────────────────
+ *   Дисплей SPI:                  Дисплей I2C:
+ *     D8-RESET, D9-DC, D10-CS       A4-SDA, A5-SCL
+ *     D11-DATA, D13-CLK
  */
 
+// #define WOKWI  // Раскомментировать для эмуляции в Wokwi (I2C дисплей)
 #define SERIAL_DEBUG
 
 #include <Arduino.h>
 #include <U8g2lib.h>
 #include "../src/display/main_screen_labels.h"
 
-// Инициализация дисплея (SPI 4-wire)
-// U8G2_MIRROR для зеркального отображения (если дисплей установлен зеркально)
-U8G2_SSD1306_128X64_NONAME_1_4W_SW_SPI display(
-    U8G2_MIRROR,                // rotation (зеркальное отображение)
-    /* clock=*/ 13,             // SCL (D13)
-    /* data=*/ 11,              // SI (D11)
-    /* cs=*/ 10,                // CS1 (D10)
-    /* dc=*/ 9,                 // A0 (D9)
-    /* reset=*/ 8               // RES (D8)
-);
+// Дисплей: выбор между SPI (реальное железо) и I2C (Wokwi)
+#ifdef WOKWI
+    U8G2_SSD1306_128X64_NONAME_1_HW_I2C display(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
+#else
+    U8G2_SSD1306_128X64_NONAME_1_4W_SW_SPI display(
+        U8G2_MIRROR,                // rotation (зеркальное отображение)
+        /* clock=*/ 13,             // SCL (D13)
+        /* data=*/ 11,              // SI (D11)
+        /* cs=*/ 10,                // CS1 (D10)
+        /* dc=*/ 9,                 // A0 (D9)
+        /* reset=*/ 8               // RES (D8)
+    );
+#endif
 
 void setup() {
     Serial.begin(9600);

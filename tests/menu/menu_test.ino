@@ -9,13 +9,16 @@
  *   Кнопка DOWN (D6)   - Вниз / -
  *   Кнопка CANCEL (D7) - Назад / Отмена
  * 
- * Пины дисплея (SPI):
- *   CS (CS1): D10
- *   RES (RESET): D8
- *   A0 (DC): D9
- *   SCL (CLOCK): D13
- *   SI (DATA): D11
+ * Конфигурация пинов:
+ *   Реальное железо:              Wokwi (эмуляция):
+ *   ─────────────────────────────────────────────────
+ *   Дисплей SPI:                  Дисплей I2C:
+ *     D8-RESET, D9-DC, D10-CS       A4-SDA, A5-SCL
+ *     D11-DATA, D13-CLK
+ *   Полив: A4                     Полив: D10 (переназначен)
  */
+
+// #define WOKWI  // Раскомментировать для эмуляции в Wokwi (I2C дисплей)
 
 #include <Arduino.h>
 #include <U8g2lib.h>
@@ -37,19 +40,29 @@
 #define PIN_BTN_DOWN   6
 #define PIN_BTN_CANCEL 7
 
+#ifdef WOKWI
+    #define PIN_WATER 10
+#else
+    #define PIN_WATER A4
+#endif
+
 // ============================================================================
 // Глобальные объекты
 // ============================================================================
 
-// Дисплей
-U8G2_SSD1306_128X64_NONAME_1_4W_SW_SPI display(
-    U8G2_MIRROR,
-    /* clock=*/ 13,
-    /* data=*/ 11,
-    /* cs=*/ 10,
-    /* dc=*/ 9,
-    /* reset=*/ 8
-);
+// Дисплей: выбор между SPI (реальное железо) и I2C (Wokwi)
+#ifdef WOKWI
+    U8G2_SSD1306_128X64_NONAME_1_HW_I2C display(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
+#else
+    U8G2_SSD1306_128X64_NONAME_1_4W_SW_SPI display(
+        U8G2_MIRROR,
+        /* clock=*/ 13,
+        /* data=*/ 11,
+        /* cs=*/ 10,
+        /* dc=*/ 9,
+        /* reset=*/ 8
+    );
+#endif
 
 // Кнопки
 Button btnOK(PIN_BTN_OK);

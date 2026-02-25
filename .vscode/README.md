@@ -1,50 +1,54 @@
-# Конфигурация Cursor/VS Code для Arduino
+# Конфигурация Cursor/VS Code для Arduino (macOS)
 
-## Что было настроено
+## Структура путей
 
-### 1. Конфигурация IntelliSense (`.vscode/c_cpp_properties.json`)
-- Настроены пути к библиотекам Arduino для Windows
-- Определены макросы для Arduino Nano (ATmega328P)
-- Настроен режим IntelliSense для AVR микроконтроллеров
+| Компонент | Путь |
+|-----------|------|
+| arduino-cli | `/opt/homebrew/bin/arduino-cli` |
+| Библиотеки | `~/Code/arduino/libraries/` |
+| AVR Core | `~/Library/Arduino15/packages/arduino/hardware/avr/1.8.7/` |
+| Компилятор | `~/Library/Arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin/` |
+| Конфиг CLI | `~/Library/Arduino15/arduino-cli.yaml` |
 
-### 2. Настройки редактора (`.vscode/settings.json`)
-- Ассоциации файлов (`.ino` как C++)
-- Исключения файлов из поиска (build, hex и т.д.)
-- Кодировка UTF-8 для поддержки кириллицы
+## Настроенные файлы
 
-### 3. Конфигурация clangd (`.clangd`)
-- Настройки компилятора для AVR
-- Флаги компиляции для Arduino
+- `c_cpp_properties.json` — пути для IntelliSense
+- `settings.json` — настройки редактора
+- `tasks.json` — задачи компиляции и загрузки
 
-## Что нужно сделать дополнительно
+## Использование
 
-### 1. Добавить пути к библиотекам пользователя
+### Компиляция
+- **Cmd+Shift+B** — компиляция проекта
+- Результат в папке `build/`
 
-Откройте `.vscode/c_cpp_properties.json` и добавьте пути к установленным библиотекам:
+### Загрузка на плату
+1. Подключите Arduino Nano
+2. Запустите задачу "List Boards" чтобы найти порт
+3. Запустите задачу "Upload"
 
-```json
-"includePath": [
-    ...
-    "C:/Users/[ВАШЕ_ИМЯ]/Documents/Arduino/libraries/U8g2/src/**",
-    "C:/Users/[ВАШЕ_ИМЯ]/Documents/Arduino/libraries/Ds1302/**"
-]
+### Serial Monitor
+```bash
+arduino-cli monitor -p /dev/cu.usbserial-XXXX -c baudrate=9600
 ```
 
-### 2. Проверить работу IntelliSense
+## Установка новых библиотек
 
-1. Откройте любой файл проекта
-2. Добавьте `#include <Arduino.h>`
-3. Начните вводить код - должно появиться автодополнение
+```bash
+# Через arduino-cli (рекомендуется)
+arduino-cli lib install "LibraryName"
 
-### 3. Если IntelliSense не работает
+# Или вручную скопировать в ~/Code/arduino/libraries/
+```
 
-1. Проверьте, что Arduino IDE установлен
-2. Найдите путь к библиотекам Arduino (см. `docs/SETUP.md`)
-3. Обновите пути в `c_cpp_properties.json`
-4. Перезапустите Cursor
-5. Выполните команду: `C/C++: Reset IntelliSense Database`
+## Решение проблем
 
-## Дополнительная информация
+### IntelliSense не работает
+1. Перезапустите Cursor
+2. Выполните: `C/C++: Reset IntelliSense Database`
 
-Подробные инструкции по настройке см. в [docs/SETUP.md](../docs/SETUP.md)
-
+### Ошибка компиляции "library not found"
+Проверьте наличие библиотеки:
+```bash
+ls ~/Code/arduino/libraries/
+```

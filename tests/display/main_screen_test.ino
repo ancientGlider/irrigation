@@ -9,21 +9,16 @@
  * - Задача 3.2: Отрисовка таймера проверки датчиков
  * - Задача 3.3: Отрисовка данных датчиков (правая колонка)
  * 
- * Использование:
- * 1. Загрузите скетч на Arduino Nano
- * 2. Подключите OLED дисплей SSD1306 128x64
- * 3. Откройте Serial Monitor (9600 baud)
- * 4. Наблюдайте отрисовку на дисплее
- * 5. Используйте Serial Monitor для управления тестовыми данными
- * 
- * Пины дисплея (SPI):
- * - CS (CS1): D10
- * - RES (RESET): D8
- * - A0 (DC): D9
- * - SCL (CLOCK): D13
- * - SI (DATA): D11
+ * Конфигурация пинов:
+ *   Реальное железо:              Wokwi (эмуляция):
+ *   ─────────────────────────────────────────────────
+ *   Дисплей SPI:                  Дисплей I2C:
+ *     D8-RESET, D9-DC, D10-CS       A4-SDA, A5-SCL
+ *     D11-DATA, D13-CLK
+ *   Полив: A4                     Полив: D10 (переназначен)
  */
 
+// #define WOKWI  // Раскомментировать для эмуляции в Wokwi (I2C дисплей)
 #define SERIAL_DEBUG  // Включить отладочный вывод
 
 #include <Arduino.h>
@@ -34,17 +29,19 @@
 #include "../src/irrigation/growing_cycle.h"
 #include "../src/settings/settings_data.h"
 
-// Инициализация дисплея (SPI 4-wire)
-// Пины: CS=D10, RES=D8, A0(DC)=D9, SCL=D13, SI(DATA)=D11
-// U8G2_MIRROR для зеркального отображения (если дисплей установлен зеркально)
-U8G2_SSD1306_128X64_NONAME_1_4W_SW_SPI display(
-    U8G2_MIRROR,                // rotation (зеркальное отображение)
-    /* clock=*/ 13,             // SCL (D13)
-    /* data=*/ 11,              // SI (D11)
-    /* cs=*/ 10,                // CS1 (D10)
-    /* dc=*/ 9,                 // A0 (D9)
-    /* reset=*/ 8               // RES (D8)
-);
+// Дисплей: выбор между SPI (реальное железо) и I2C (Wokwi)
+#ifdef WOKWI
+    U8G2_SSD1306_128X64_NONAME_1_HW_I2C display(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
+#else
+    U8G2_SSD1306_128X64_NONAME_1_4W_SW_SPI display(
+        U8G2_MIRROR,                // rotation (зеркальное отображение)
+        /* clock=*/ 13,             // SCL (D13)
+        /* data=*/ 11,              // SI (D11)
+        /* cs=*/ 10,                // CS1 (D10)
+        /* dc=*/ 9,                 // A0 (D9)
+        /* reset=*/ 8               // RES (D8)
+    );
+#endif
 
 // Моковые данные состояния системы
 Irrigation::SystemState mockSystemState;
