@@ -1,0 +1,140 @@
+# Required characters for custom fonts
+# This file lists all characters used in the Irrigation project
+# Format: one character per line or grouped by category
+
+# ============================================================================
+# ASCII Printable Characters
+# ============================================================================
+
+# Space (0x20)
+ 
+
+# Punctuation and symbols
+!
+%
+.
+:
+/
+?
+<
+>
+^
+v
+-
+*
+
+# Digits (0x30-0x39)
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+
+# Latin uppercase (full alphabet for flexibility)
+A
+B
+C
+D
+E
+F
+G
+H
+I
+J
+K
+L
+M
+N
+O
+P
+Q
+R
+S
+T
+U
+V
+W
+X
+Y
+Z
+
+# Latin lowercase (used in min:, max:, Curr:, %d, %m)
+a
+c
+d
+i
+m
+n
+r
+u
+v
+x
+
+# ============================================================================
+# Unicode Special Characters
+# ============================================================================
+
+# Degree sign (U+00B0) - for temperature display
+°
+
+# ============================================================================
+# Cyrillic Uppercase (U+0410-U+042F)
+# ============================================================================
+
+А
+Б
+В
+Д
+Е
+Ж
+И
+К
+Л
+М
+Н
+О
+П
+Р
+С
+Т
+У
+Ц
+Ч
+Ь
+Ы
+Ю
+
+# ============================================================================
+# Cyrillic Lowercase (U+0430-U+044F)
+# ============================================================================
+
+а
+б
+в
+д
+е
+ж
+з
+и
+к
+л
+м
+н
+о
+п
+р
+с
+т
+у
+х
+ц
+ч
+щ
+ь
+ы
+я

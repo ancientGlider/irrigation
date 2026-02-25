@@ -1,0 +1,79 @@
+stateDiagram-v2
+    direction LR
+
+    %% ==================== INITIAL STATE ====================
+    [*] --> Stopping : initialization
+
+    %% ==================== STATE DEFINITIONS ====================
+    state "Stopping\nPump: OFF\nInitial state" as Stopping
+    state "Idle\nPump: OFF\nMoisture monitoring" as Idle
+    state "AutoPause\nPump: OFF\nPause between attempts" as AutoPause
+    state "AutoWatering\nPump: ON\nActive watering" as AutoWatering
+    state "ManualWatering\nPump: ON\nManual watering" as ManualWatering
+    state "ManualCleaning\nPump: ON\nPump cleaning" as ManualCleaning
+    state "ManualPause\nPump: OFF\nPause between cycles" as ManualPause
+    state "OutOfWater\nPump: OFF\nOut of water" as OutOfWater
+
+    %% ==================== AUTOMATIC TRANSITIONS ====================
+    Idle --> AutoPause : soilMoisture ≤\nSoilMoistureStartPercent
+
+    AutoPause --> Idle : soilMoisture ≥\nSoilMoistureStopPercent
+    AutoPause --> AutoWatering : attempts < maxAttempts\n[attempts++]
+    AutoPause --> Idle : soilMoisture >\nbeginWateringHumidity + 1
+    AutoPause --> OutOfWater : (all other conditions)
+
+    AutoWatering --> AutoPause : timer expired
+
+    ManualWatering --> Stopping : previousState == Stopping
+    ManualWatering --> Idle : previousState ≠ Stopping
+
+    ManualCleaning --> ManualPause : timer expired\n[attempts++]
+
+    ManualPause --> ManualCleaning : attempts < CleaningCycles
+    ManualPause --> Stopping : attempts ≥ CleaningCycles +\npreviousState == Stopping
+    ManualPause --> Idle : attempts ≥ CleaningCycles +\npreviousState ≠ Stopping
+
+    OutOfWater --> Idle : timer expired (1 day)
+
+    %% ==================== FORCED ENTRY NOTES ====================
+    note right of ManualWatering
+        **FORCED ENTRY:**
+        From any state
+        by external command
+    end note
+
+    note right of ManualCleaning
+        **FORCED ENTRY:**
+        From any state
+        by external command
+    end note
+
+    note left of Stopping
+        **FORCED ENTRY:**
+        From any state
+        by external command
+    end note
+
+    note right of Idle
+        **MONITORING MODE (State 1)**
+    end note
+
+    note right of AutoPause
+        **AUTO WATERING - PAUSE (State 2)**
+        On entry from Idle:
+        [beginWateringHumidity = current]
+        [WateringAttempts = 0]
+    end note
+
+    note right of AutoWatering
+        **AUTO WATERING - ACTIVE (State 3)**
+    end note
+
+    note right of ManualPause
+        **CLEANING - PAUSE (State 6)**
+    end note
+
+    note right of OutOfWater
+        **OUT OF WATER (State 7)**
+    end note
+

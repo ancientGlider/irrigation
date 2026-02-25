@@ -1,0 +1,130 @@
+@startuml plant_watering_fsm
+!define TITLE <u>Plant Watering Finite State Machine</u>
+title TITLE
+
+skinparam StateBkgColor #FFFFFF
+skinparam StateAttributeFontSize 10
+skinparam State {
+    BackgroundColor #E1F5FF
+    BorderColor #01579B
+    FontColor #000000
+    AttributeFontColor #0D47A1
+}
+
+' ==================== NOTES ====================
+
+note right of AutoWatering
+  Pump state on this diagram reflects the logical FSM output.
+  Actual voltage level depends on the `highIsOn` flag passed to `Watering::begin()`.
+end note
+
+' ==================== INITIAL STATE ====================
+
+state "Stopping\nPump: OFF\nInitial state" as Stopping #FFCDD2
+
+' ==================== MONITORING MODE ====================
+
+state "Idle\nPump: OFF\nMoisture monitoring" as Idle #E1F5FF
+
+' ==================== AUTOMATIC WATERING MODE ====================
+
+state "AutoPause\nPump: OFF\nPause between attempts" as AutoPause #C8E6C9
+
+state "AutoWatering\nPump: ON\nActive watering" as AutoWatering #C8E6C9
+
+
+' ==================== MANUAL WATERING MODE ====================
+
+state "ManualWatering\nPump: ON\nManual watering" as ManualWatering #FFE0B2
+
+' ==================== CLEANING MODE ====================
+
+state "ManualCleaning\nPump: ON\nPump cleaning" as ManualCleaning #FFE0B2
+
+state "ManualPause\nPump: OFF\nPause between cycles" as ManualPause #FFE0B2
+
+' ==================== OUT OF WATER STATE ====================
+
+state "OutOfWater\nPump: OFF\nOut of water" as OutOfWater #FFCDD2
+
+' ==================== AUTOMATIC TRANSITIONS ====================
+
+' === From IDLE ===
+Idle --> AutoPause : soilMoisture ≤\nSoilMoistureStartPercent
+
+' === FROM AutoPause ===
+AutoPause --> Idle : soilMoisture ≥\nSoilMoistureStopPercent
+
+AutoPause --> AutoWatering : attempts < maxAttempts\n[attempts++]
+
+AutoPause --> Idle : soilMoisture >\nbeginWateringHumidity + 1
+
+AutoPause --> OutOfWater : (all other conditions)
+
+' === From AutoWatering ===
+AutoWatering --> AutoPause : timer expired
+
+' === From ManualWatering ===
+ManualWatering --> Stopping : previousState ==\nStopping
+
+ManualWatering --> Idle : previousState ≠\nStopping
+
+' === FROM ManualCleaning ===
+ManualCleaning --> ManualPause : timer expired\n[attempts++]
+
+' === From ManualPause ===
+ManualPause --> ManualCleaning : attempts <\nCleaningCycles
+
+ManualPause --> Stopping : attempts ≥ CleaningCycles +\npreviousState ==\nStopping
+
+ManualPause --> Idle : attempts ≥ CleaningCycles +\npreviousState ≠\nStopping
+
+' === From OutOfWater ===
+OutOfWater --> Idle : timer expired\n(1 day)
+
+' ==================== FORCED TRANSITIONS ====================
+
+[*] --> Stopping : initialization
+
+note right of ManualWatering
+  **FORCED ENTRY:**
+  From any state
+  by external command
+end note
+
+note right of ManualCleaning
+  **FORCED ENTRY:**
+  From any state
+  by external command
+end note
+
+note left of Stopping
+  **FORCED ENTRY:**
+  From any state
+  by external command
+end note
+
+note bottom of Idle
+  **MONITORING MODE (State 1)**
+end note
+
+note bottom of AutoPause
+  **AUTO WATERING - PAUSE (State 2)**
+  On entry from Idle:
+  [beginWateringHumidity = current]
+  [WateringAttempts = 0]
+end note
+
+note bottom of AutoWatering
+  **AUTO WATERING - ACTIVE (State 3)**
+end note
+
+note bottom of ManualPause
+  **CLEANING - PAUSE (State 6)**
+end note
+
+note bottom of OutOfWater
+  **OUT OF WATER (State 7)**
+end note
+
+@enduml

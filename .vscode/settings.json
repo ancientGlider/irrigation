@@ -1,0 +1,43 @@
+{
+    "files.associations": {
+        "*.ino": "cpp",
+        "*.h": "c",
+        "*.cpp": "cpp",
+        "*.hpp": "cpp"
+    },
+    "C_Cpp.intelliSenseEngine": "default",
+    "C_Cpp.errorSquiggles": "enabled",
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/**",
+        "${workspaceFolder}/src/**",
+        "${workspaceFolder}/lib/**"
+    ],
+    "C_Cpp.default.defines": [
+        "ARDUINO=10819",
+        "ARDUINO_AVR_NANO",
+        "ARDUINO_ARCH_AVR",
+        "F_CPU=16000000L",
+        "__AVR_ATmega328P__"
+    ],
+    "C_Cpp.default.compilerPath": "",
+    "C_Cpp.default.cStandard": "c11",
+    "C_Cpp.default.cppStandard": "c++11",
+    "C_Cpp.default.intelliSenseMode": "gcc-x86",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/build": true,
+        "**/*.hex": true,
+        "**/*.elf": true,
+        "**/*.eep": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/*.code-search": true,
+        "**/build": true,
+        "**/.pio": true
+    },
+    "files.encoding": "utf8"
+}
+

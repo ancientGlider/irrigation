@@ -1,0 +1,45 @@
+{
+    "configurations": [
+        {
+            "name": "Arduino",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/src/**",
+                "${workspaceFolder}/lib/**",
+                "C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino",
+                "C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs",
+                "C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/**",
+                "C:/Program Files/Arduino/hardware/arduino/avr/cores/arduino",
+                "C:/Program Files/Arduino/hardware/arduino/avr/variants/eightanaloginputs",
+                "C:/Program Files/Arduino/hardware/arduino/avr/libraries/**",
+                "C:/Users/*/AppData/Local/Arduino15/packages/arduino/hardware/avr/**"
+            ],
+            "defines": [
+                "ARDUINO=10819",
+                "ARDUINO_AVR_NANO",
+                "ARDUINO_ARCH_AVR",
+                "F_CPU=16000000L",
+                "__AVR_ATmega328P__"
+            ],
+            "compilerPath": "",
+            "cStandard": "c11",
+            "cppStandard": "c++11",
+            "intelliSenseMode": "gcc-x86",
+            "compilerArgs": [
+                "-mmcu=atmega328p",
+                "-DF_CPU=16000000L"
+            ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "C:/Program Files (x86)/Arduino/hardware/arduino/avr",
+                    "C:/Program Files/Arduino/hardware/arduino/avr",
+                    "C:/Users/*/AppData/Local/Arduino15/packages/arduino/hardware/avr"
+                ],
+                "limitSymbolsToIncludedHeaders": false
+            }
+        }
+    ],
+    "version": 4
+}
+
