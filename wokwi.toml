@@ -1,0 +1,8 @@
+# Wokwi Configuration
+# https://docs.wokwi.com/vscode/project-config
+
+[wokwi]
+version = 1
+firmware = "build/irrigation.ino.hex"
+elf = "build/irrigation.ino.elf"
+rfc2217ServerPort = 4000

@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "author": "Max Titov",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-arduino-nano", "id": "nano", "top": -62.4, "left": 124.3, "attrs": {} },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn1",
+      "top": 73.4,
+      "left": -96,
+      "rotate": 90,
+      "attrs": { "color": "green", "xray": "1" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn2",
+      "top": 76.7,
+      "left": -25.3,
+      "rotate": 90,
+      "attrs": { "color": "green", "xray": "1" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn3",
+      "top": 73.4,
+      "left": 38.4,
+      "rotate": 90,
+      "attrs": { "color": "green", "xray": "1" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn4",
+      "top": 75.7,
+      "left": 116.7,
+      "rotate": 90,
+      "attrs": { "color": "green", "xray": "1" }
+    },
+    {
+      "type": "board-ssd1306",
+      "id": "oled1",
+      "top": -140.86,
+      "left": -95.77,
+      "attrs": { "i2cAddress": "0x3c" }
+    },
+    { "type": "wokwi-dht22", "id": "dht1", "top": -162.9, "left": 52.2, "attrs": {} },
+    { "type": "wokwi-potentiometer", "id": "pot1", "top": -49.3, "left": -77, "attrs": {} },
+    { "type": "wokwi-vcc", "id": "vcc1", "top": -162.44, "left": 326.4, "attrs": {} },
+    { "type": "wokwi-gnd", "id": "gnd1", "top": 153.6, "left": 335.4, "attrs": {} },
+    {
+      "type": "wokwi-rgb-led",
+      "id": "rgb1",
+      "top": -101.6,
+      "left": 337.1,
+      "attrs": { "common": "cathode" }
+    },
+    {
+      "type": "wokwi-rgb-led",
+      "id": "rgb2",
+      "top": -101.6,
+      "left": 375.5,
+      "attrs": { "common": "cathode" }
+    }
+  ],
+  "connections": [
+    [ "btn4:1.r", "gnd1:GND", "green", [ "v0" ] ],
+    [ "btn3:1.r", "gnd1:GND", "green", [ "v0" ] ],
+    [ "btn2:1.r", "gnd1:GND", "green", [ "v0" ] ],
+    [ "btn1:1.r", "gnd1:GND", "green", [ "v0" ] ],
+    [ "pot1:VCC", "nano:A1", "red", [ "v9.6", "h210.4" ] ],
+    [ "nano:A0", "pot1:SIG", "green", [ "v0" ] ],
+    [ "pot1:GND", "gnd1:GND", "black", [ "v28.8", "h-57.6", "v105.6" ] ],
+    [ "dht1:SDA", "nano:A2", "green", [ "v86.4", "h0.1" ] ],
+    [ "dht1:VCC", "vcc1:VCC", "red", [ "v0", "h-38.4", "v-134.4", "h278.4", "v57.6" ] ],
+    [ "dht1:GND", "gnd1:GND", "black", [ "v105.6", "h19.2", "v96" ] ],
+    [ "nano:A4", "oled1:SDA", "green", [ "v48", "h-182.4", "v-201.6", "h-9.6" ] ],
+    [ "nano:A5", "oled1:SCL", "green", [ "v57.6", "h-201.6", "v-220.8" ] ],
+    [ "oled1:GND", "gnd1:GND", "black", [ "v-19.2", "h-48", "v307.2" ] ],
+    [ "oled1:VCC", "vcc1:VCC", "red", [ "v-48", "h355.35", "v48" ] ],
+    [ "gnd1:GND", "rgb2:COM", "black", [ "v0", "h38.4" ] ],
+    [ "rgb1:COM", "gnd1:GND", "green", [ "v0" ] ],
+    [ "nano:10", "rgb1:R", "green", [ "v-19.2", "h19.2" ] ],
+    [ "nano:A3", "rgb2:R", "green", [ "v28.8", "h182.4" ] ],
+    [ "nano:5", "btn1:1.l", "green", [ "v105.6", "h-249.6" ] ],
+    [ "nano:6", "btn2:1.l", "green", [ "v96", "h-153.6" ] ],
+    [ "nano:2", "btn3:1.l", "green", [ "v0" ] ],
+    [ "btn4:1.l", "nano:7", "green", [ "v1", "h30.8" ] ]
+  ],
+  "dependencies": {}
+}

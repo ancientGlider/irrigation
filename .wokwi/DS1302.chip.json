@@ -1,0 +1,15 @@
+{
+  "name": "DS1302",
+  "author": "Maverick",
+  "pins": [
+    "VCC",
+    "GND",
+    "CLK",
+    "DAT",
+    "RST",
+    "",
+    "",
+    "",
+    ""
+  ]
+}
